@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Список пользователей</title>
+    <style>
+        table {
+            width: 95%;
+            margin-bottom: 20px;
+            margin-top: 20px;
+            border: 1px solid #dddddd;
+            border-collapse: collapse;
+        }
+
+        th {
+            font-weight: bold;
+            padding: 5px;
+            background: #efefef;
+            border: 1px solid #dddddd;
+        }
+
+        td {
+            border: 1px solid #dddddd;
+            padding: 5px;
+        }
+
+        .container {
+            width: 99%;
+            border-radius: 5px;
+            background-color: #f2f2f2;
+            padding: 40px;
+        }
+
+        input {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            margin: 2px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            float: left;
+        }
+
+        input:hover {
+            background-color: #45a049;
+        }
+
+        .redButton {
+            background-color: #e00f0f;
+        }
+
+        .redButton:hover {
+            background-color: #ad0c0c;
+        }
+        .grayButton {
+            background-color: #696969;
+        }
+
+        .grayButton:hover {
+            background-color: #383838;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Список пользователей</h2>
+
+    <div style="position: absolute; left: 84%; bottom: 89%;">
+        <input type="button" value="Профиль"
+               onclick="window.location.href = 'user'"/>
+        <input class="grayButton" type="button" value="Выйти"
+               onclick="window.location.href = 'logout'"/>
+    </div>
+
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Email</th>
+            <th>Username</th>
+            <th>Password</th>
+            <th>Role</th>
+            <th>Operations</th>
+        </tr>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.surname}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.username}"></td>
+            <td th:text="${user.password}"></td>
+            <td>
+                <th:block th:each="role : ${user.roles}">
+                    <span th:text="${role}"></span>
+                    <span>;</span>
+                </th:block>
+            </td>
+            <td>
+                <form th:action="@{admin/{id}/edit(id=${user.id})}">
+                    <input type="submit" value="Редактировать"/>
+                </form>
+                <form th:method="DELETE" th:action="@{admin/{id}(id=${user.id})}">
+                    <input class="redButton" type="submit" value="Удалить"/>
+                </form>
+            </td>
+        </tr>
+    </table>
+
+    <input type="button" value="Добавить"
+           onclick="window.location.href = 'admin/new'"/>
+</div>
+</body>
+</html>
